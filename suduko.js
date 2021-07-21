@@ -28,7 +28,13 @@ function CreateGrid(size) {
             temp.style.height = "15px";
             temp.style.width = "15px";
 
+            if(j % Math.sqrt(size) == Math.sqrt(size) - 1) {
+                temp.style.borderRight = "4px solid black";
+            }
 
+            if(i % Math.sqrt(size) == Math.sqrt(size) - 1) {
+                temp.style.borderBottom = "4px solid black";
+            }
 
             temp.value = 0;
             temp.size = 2;
@@ -57,11 +63,12 @@ function CreateGrid(size) {
     block.appendChild(document.createElement('br'));
     solve_button = document.createElement('button');
     reset_button = document.createElement('button');
+    
     solve_button.innerHTML = 'SOLVE';
     reset_button.innerHTML = 'RESET GRID';
+
     block.appendChild(solve_button)
     block.appendChild(reset_button);
-
     reset_button.onclick = () => {
         resetGrid(arr);
     }
@@ -97,22 +104,26 @@ function solveSudoko(arr) {
     var emptyCells = findEmptyCells(arr);
     // console.log(emptyCells);
 
-    // var isValidInput = checkIsValidInput(arr);
+    var isValidInput = checkIsValidInput(arr);
 
-    // if(isValidInput == false) {
-    //     alert('Invalid Suduko Input');
-    //     break;
-    // }
+    if(isValidInput == false) {
+        alert('Invalid Suduko Input');
+        resetGrid(arr);
+    }
 
-    for(let i = 0; i < emptyCells.length; i++) {
-        var temp = fillEmptyCell(emptyCells[i]);
-        if(temp == false) {
-            i = i - 2;
-            if(i == -2) {
-                alert('Invalid Input');
-                break;
+    else {
+
+        for(let i = 0; i < emptyCells.length; i++) {
+            var temp = fillEmptyCell(emptyCells[i]);
+            if(temp == false) {
+                i = i - 2;
+                if(i == -2) {
+                    alert('Invalid Input');
+                    break;
+                }
             }
         }
+
     }
 
 }
@@ -121,9 +132,12 @@ function checkIsValidInput(arr) {
 
     for(let i = 0; i < size; i++) {
         for(let j = 0; j < size; j++) {
-            var currVal = parseInt(getHtmlElements([i, j]).value);
-            if(isValidRow([i, j], currVal) == false || isValidCol([i, j], currVal) == false || isValidGrid([i, j], currVal) == false) {
-                return false;
+            var currVal = arr[i][j].value;
+            console.log(currVal);
+            if(currVal != 0) {
+                if(isValidRow([i, j], currVal) == false || isValidCol([i, j], currVal) == false || isValidGrid([i, j], currVal) == false) {
+                    return false;
+                }
             }
         }
     }
@@ -136,7 +150,7 @@ function findEmptyCells(arr) {
     for(let i = 0; i < arr.length; i++) {
         for(let j = 0; j < arr.length; j++) {
             //console.log(arr[i][j].value);
-            if(arr[i][j].value == "0") {
+            if(arr[i][j].value == 0) {
                 cells.push([i, j]);
             }
         }
