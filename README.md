@@ -1,2 +1,2 @@
-# suduko_solver
+# suduko-solver
 Suduko solver using backtracking algorithm..
